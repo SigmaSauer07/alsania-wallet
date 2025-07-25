@@ -4,7 +4,3 @@ Original MetaMask source:
 https://github.com/MetaMask/metamask-extension
 
 Alsania Wallet modifies and extends the original codebase and branding.
-
-All modifications and additions are © 2025 Alsania.
-Original MetaMask license:
-https://github.com/MetaMask/metamask-extension/blob/develop/LICENSE

@@ -141,6 +141,7 @@ playwright-report/
 # Git clean artifacts
 *-clean/
 alsania-all-clean.zip
+alsania-wallet-cleanup.sh
 
 # MetaMask specific (if leftover)
 artifacts/
