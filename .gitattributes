@@ -22,3 +22,15 @@ app/_locales/** linguist-generated
 /.yarn/plugins/** binary
 
 app/*.html linguist-language=EJS
+
+# Track image assets with LFS
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+
+# Track build zips if they slip in
+*.zip filter=lfs diff=lfs merge=lfs -text
+# Track video assets with LFS
+*.mp4 filter=lfs diff=lfs merge=lfs -text

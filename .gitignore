@@ -91,3 +91,57 @@ html-report-multichain/
 
 # UI Integration tests
 test/integration/config/assets
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+.yarn/
+.yarnrc.yml
+
+# Build outputs
+dist/
+build/
+out/
+*.log
+coverage/
+.nyc_output/
+.cache/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing artifacts
+*.lcov
+jest-test-results.json
+playwright-report/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+*.lock
+*.pid
+
+# Git clean artifacts
+*-clean/
+alsania-all-clean.zip
+
+# MetaMask specific (if leftover)
+artifacts/
+lavamoat/
