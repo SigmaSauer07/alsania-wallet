@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Name renders address with image 1`] = `
+<div>
+  <div
+    class="mm-box mm-box--display-flex"
+  >
+    <div
+      class="name name__clickable name__saved"
+    >
+      <span
+        class="mm-box name__icon mm-icon mm-icon--size-md mm-box--display-inline-block mm-box--color-info-default"
+        style="mask-image: url('./images/icons/verified-filled.svg');"
+      />
+      <p
+        class="mm-box mm-text name__name mm-text--body-md mm-box--color-text-default"
+      >
+        TestName
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Name renders address with long saved name 1`] = `
+<div>
+  <div
+    class="mm-box mm-box--display-flex"
+  >
+    <div
+      class="name name__clickable name__saved"
+    >
+      <span
+        class="mm-box name__icon mm-icon mm-icon--size-md mm-box--display-inline-block mm-box--color-info-default"
+        style="mask-image: url('./images/icons/verified-filled.svg');"
+      />
+      <p
+        class="mm-box mm-text name__name mm-text--body-md mm-box--color-text-default"
+      >
+        Very long...
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Name renders address with no saved name 1`] = `
+<div>
+  <div
+    class="mm-box mm-box--display-flex"
+  >
+    <div
+      class="name name__clickable name__missing"
+    >
+      <span
+        class="mm-box name__icon mm-icon mm-icon--size-md mm-box--display-inline-block mm-box--color-inherit"
+        style="mask-image: url('./images/icons/question.svg');"
+      />
+      <p
+        class="mm-box mm-text name__value mm-text--body-md mm-box--color-text-default"
+      >
+        0xC0ffe...54977
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Name renders address with saved name 1`] = `
+<div>
+  <div
+    class="mm-box mm-box--display-flex"
+  >
+    <div
+      class="name name__clickable name__saved"
+    >
+      <span
+        class="mm-box name__icon mm-icon mm-icon--size-md mm-box--display-inline-block mm-box--color-info-default"
+        style="mask-image: url('./images/icons/verified-filled.svg');"
+      />
+      <p
+        class="mm-box mm-text name__name mm-text--body-md mm-box--color-text-default"
+      >
+        TestName
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Name renders when no address value is passed 1`] = `
+<div>
+  <div
+    class="mm-box mm-box--display-flex"
+  >
+    <div
+      class="name name__clickable name__missing"
+    >
+      <span
+        class="mm-box name__icon mm-icon mm-icon--size-md mm-box--display-inline-block mm-box--color-inherit"
+        style="mask-image: url('./images/icons/question.svg');"
+      />
+      <p
+        class="mm-box mm-text name__value mm-text--body-md mm-box--color-text-default"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,196 @@
+Step-by-Step: Forking & Rebranding MetaMask
+🧠 We’ll clone the official MetaMask extension, swap out the visuals and branding, and rebuild it as the Alsania Wallet.
+
+✅ 1. Clone MetaMask Repo
+bash
+Copy code
+git clone https://github.com/MetaMask/metamask-extension alsania-wallet
+cd alsania-wallet
+✅ 2. Install & Build
+Make sure you’re on Node.js v18+ (use nvm if needed).
+
+bash
+Copy code
+yarn install
+yarn dist
+This will create a dist/chrome or dist/firefox folder you can load as an extension in dev mode.
+
+🎨 3. Customize Branding
+File/Folder	What to Replace
+/app/images/metamask-fox.svg	🦊 → Replace with Alsania logo (SVG or PNG)
+/app/scripts/onboarding	Splash screen, onboarding flows
+/ui/pages	All React UI pages (use find to locate key terms)
+/ui/styles	SCSS themes — update colors, shadows, button styles
+manifest.json	Name, description, icons, permissions
+
+🔄 Logo Replacement Example:
+bash
+Copy code
+# Replace the fox SVG with your Alsania logo
+cp assets/alsania-logo.svg app/images/metamask-fox.svg
+You’ll see the logo change on the extension’s popup immediately after reload.
+
+🔁 4. Change Name and Descriptions
+Edit in /manifest.json:
+
+json
+Copy code
+{
+  "name": "Alsania Wallet",
+  "description": "Quantum-resistant Ethereum wallet for Alsania L2",
+  "version": "1.0.0",
+  "icons": {
+    "16": "images/alsania-icon-16.png",
+    "48": "images/alsania-icon-48.png",
+    "128": "images/alsania-icon-128.png"
+  }
+}
+✅ You can also search for "MetaMask" across the repo and replace it with "Alsania Wallet".
+
+🧪 5. Test It in Chrome
+Go to chrome://extensions
+
+Enable Developer Mode
+
+Click Load Unpacked
+
+Select the dist/chrome folder
+
+You now have a working Alsania Wallet Chrome extension 🎉
+
+🧠 6. (Optional) Add Quantum Features
+Want to support Dilithium signatures?
+
+Add a new key pair module (dilithium-keys.js) inside /app/scripts
+
+Update keyring-controller to handle Dilithium keys (you may need WASM bindings)
+
+Modify UI to allow switching key types or “Upgrading to Quantum”
+
+This is advanced but doable if you’re building a smart wallet backend.
+
+📦 Build for Distribution
+bash
+Copy code
+yarn dist
+Then zip the output and upload to:
+
+Chrome Web Store
+
+Firefox Add-ons
+
+Brave / Opera (Chrome compatible)
+
+✅ Final Checklist for Alsania Wallet Fork
+Task	Done?
+MetaMask cloned	✅
+Logos and icons replaced	✅
+Name & manifest updated	✅
+UI styled with Alsania theme	✅
+Custom splash and welcome screen	✅
+Rebuilt with yarn dist	✅
+Loaded in browser as test	✅
+
+✅ Bonus: I Can Build You a Starter Kit
+Want me to:
+
+🎨 Insert Alsania branding + icons
+
+🧠 Add Dilithium placeholder key module
+
+🔧 Prepackage it for Chrome test
+
+📁 Push to GitHub under your namespace
+
+Let me know and I’ll spin up the full fork starter for you. Just drop your logo, color scheme, and theme guidelines and I’ll get it rolling 🔨🤖
+
+
+
+
+
+You said:
+is metamask sdk and extension different?
+
+
+ChatGPT said:
+💡 Yes — MetaMask SDK and the MetaMask Extension are very different tools, serving different purposes.
+
+Let’s break this down clearly:
+
+🧰 MetaMask SDK vs Extension: Core Differences
+Feature	MetaMask SDK	MetaMask Extension
+What it is	A JS/TS library for dApps to connect to MetaMask (incl. mobile)	A browser extension wallet that injects Web3
+Purpose	Embed wallet connection in your dApp (Web, Unity, React Native)	Provides the wallet and signing UI (the fox 🦊)
+Used by	DApp developers (frontend integration)	End users (wallet app in browser)
+Customizable?	You control your dApp UI; SDK just links to MM	Yes, if you fork it — deep customization
+Extension Required?	Yes — SDK connects to installed MetaMask (desktop/mobile)	N/A
+Mobile Support	✅ Works with MetaMask Mobile	✅ MetaMask Mobile itself
+Dilithium or custom sigs?	❌ Not directly	✅ If you fork and modify signing logic
+
+✅ MetaMask SDK Use Case
+If you just want to integrate MetaMask into your dApp UI and have users connect easily, the SDK is perfect.
+
+Example:
+ts
+Copy code
+import { MetaMaskSDK } from '@metamask/sdk';
+
+const MMSDK = new MetaMaskSDK({
+  dappMetadata: {
+    name: 'Alsania DApp',
+    url: 'https://alsania.ai',
+  },
+});
+
+const ethereum = MMSDK.getProvider();
+await ethereum.request({ method: 'eth_requestAccounts' });
+💡 Use MetaMask SDK for:
+
+DApp UI onboarding
+
+Mobile MetaMask compatibility
+
+Easy integration with Unity, React Native, Flutter, etc.
+
+✅ MetaMask Extension Use Case
+If you want to build your own wallet — brand, behavior, and signature logic — you fork the extension.
+
+You get:
+
+Full UI control (replace fox, styling, splash, etc.)
+
+Ability to plug in new signing algorithms (e.g. Dilithium)
+
+Real browser extension with its own name
+
+💡 Use the Extension fork for:
+
+Alsania-branded wallet experience
+
+Quantum-safe auth flows
+
+Native ZK integrations
+
+Unique identity/wallet UX
+
+🔧 Can I Use Both?
+Yes! And you probably should:
+
+For Your DApp (Frontend)	Use MetaMask SDK or Web3Modal + ethers.js
+For Alsania Wallet (User-side)	Fork MetaMask Extension, customize UX + cryptography
+
+✅ That way:
+
+Builders use your SDK-integrated dApps
+
+Users use your branded wallet (forked extension)
+
+🧠 Summary: Quick Checklist
+Use Case	Use This
+Build custom wallet UI with your brand	Fork the Extension
+Add Dilithium or quantum-safe signature options	Fork the Extension
+Connect MetaMask (desktop/mobile) to your dApp	Use MetaMask SDK
+Mobile/web2 onboarding flow to MM	SDK + WalletConnect
+Extension-level control (icons, UX, signing)	Fork only
+
+
