@@ -17,12 +17,20 @@ type NftOptionsProps = {
   onRemove: () => void;
   onViewOnOpensea?: () => void;
   showOpenSeaLink: boolean;
+  onToggleFavorite?: () => void;
+  isFavorite?: boolean;
+  onCopyMetadataUrl?: () => void;
+  onDownloadImage?: () => void;
 };
 
 const NftOptions = ({
   onRemove,
   onViewOnOpensea,
   showOpenSeaLink,
+  onToggleFavorite,
+  isFavorite,
+  onCopyMetadataUrl,
+  onDownloadImage,
 }: NftOptionsProps) => {
   const t = useContext(I18nContext);
   const [nftOptionsOpen, setNftOptionsOpen] = useState(false);
@@ -69,6 +77,46 @@ const NftOptions = ({
               marginInlineEnd={2}
             />
             {t('viewOnOpensea')}
+          </SelectableListItem>
+        ) : null}
+        {onToggleFavorite ? (
+          <SelectableListItem
+            testId="nft-options__favorite"
+            onClick={() => {
+              closePopover();
+              onToggleFavorite?.();
+            }}
+          >
+            <Icon
+              name={isFavorite ? IconName.BookmarkFilled : IconName.Bookmark}
+              size={IconSize.Sm}
+              marginInlineEnd={2}
+            />
+            {isFavorite ? t('removeFavorite') : t('addFavorite')}
+          </SelectableListItem>
+        ) : null}
+        {onCopyMetadataUrl ? (
+          <SelectableListItem
+            testId="nft-options__copy-metadata-url"
+            onClick={() => {
+              closePopover();
+              onCopyMetadataUrl?.();
+            }}
+          >
+            <Icon name={IconName.Copy} size={IconSize.Sm} marginInlineEnd={2} />
+            {t('copyMetadataUrl')}
+          </SelectableListItem>
+        ) : null}
+        {onDownloadImage ? (
+          <SelectableListItem
+            testId="nft-options__download-image"
+            onClick={() => {
+              closePopover();
+              onDownloadImage?.();
+            }}
+          >
+            <Icon name={IconName.Download} size={IconSize.Sm} marginInlineEnd={2} />
+            {t('downloadImage')}
           </SelectableListItem>
         ) : null}
         <SelectableListItem

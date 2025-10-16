@@ -514,19 +514,19 @@
     "description": "$1 is the first item, $2 is the second item. Used in Snap Install Warning modal."
   },
   "appDescription": {
-    "message": "The world's most trusted crypto wallet",
+    "message": "Alsania Wallet – smart, fast, and cross‑platform",
     "description": "The description of the application"
   },
   "appName": {
-    "message": "MetaMask",
+    "message": "Alsania Wallet",
     "description": "The name of the application"
   },
   "appNameBeta": {
-    "message": "MetaMask Beta",
+    "message": "Alsania Wallet Beta",
     "description": "The name of the application (Beta)"
   },
   "appNameFlask": {
-    "message": "MetaMask Flask",
+    "message": "Alsania Wallet Flask",
     "description": "The name of the application (Flask)"
   },
   "apply": {
@@ -541,6 +541,18 @@
   "approveIncreaseAllowance": {
     "message": "Increase $1 spending cap",
     "description": "The token symbol that is being approved"
+  },
+  "addFavorite": {
+    "message": "Add to favorites"
+  },
+  "removeFavorite": {
+    "message": "Remove favorite"
+  },
+  "copyMetadataUrl": {
+    "message": "Copy metadata URL"
+  },
+  "downloadImage": {
+    "message": "Download image"
   },
   "approveSpendingCap": {
     "message": "Approve $1 spending cap",

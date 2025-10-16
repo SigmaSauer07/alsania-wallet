@@ -9,7 +9,7 @@
       "128": "images/icon-128.png",
       "512": "images/icon-512.png"
     },
-    "default_title": "MetaMask Beta"
+    "default_title": "Alsania Wallet Beta"
   },
   "externally_connectable": {
     "matches": ["http://*/*", "https://*/*"],

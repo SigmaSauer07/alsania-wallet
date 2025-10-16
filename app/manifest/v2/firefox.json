@@ -1,7 +1,7 @@
 {
   "applications": {
     "gecko": {
-      "id": "webextension@metamask.io",
+      "id": "webextension@alsania.ai",
       "strict_min_version": "115.0"
     }
   },
@@ -15,7 +15,7 @@
       "128": "images/icon-128.png",
       "512": "images/icon-512.png"
     },
-    "default_title": "MetaMask",
+    "default_title": "Alsania Wallet",
     "default_popup": "popup.html"
   },
   "manifest_version": 2

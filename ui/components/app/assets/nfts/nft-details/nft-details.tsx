@@ -46,6 +46,7 @@ import {
 } from '../../../../../store/actions';
 import { CHAIN_IDS } from '../../../../../../shared/constants/network';
 import NftOptions from '../nft-options/nft-options';
+import localforage from 'localforage';
 import { startNewDraftTransaction } from '../../../../../ducks/send';
 import InfoTooltip from '../../../../ui/info-tooltip';
 import { usePrevious } from '../../../../../hooks/usePrevious';
@@ -289,6 +290,60 @@ export function NftDetailsComponent({
   const sendDisabled =
     standard !== TokenStandard.ERC721 && standard !== TokenStandard.ERC1155;
 
+  const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    const loadFav = async () => {
+      try {
+        const key = `nftFavorite:${nftChainId}:${address}:${tokenId}`;
+        const val = await localforage.getItem<string>(key);
+        setIsFavorite(val === '1');
+      } catch {
+        // ignore
+      }
+    };
+    loadFav();
+  }, [nftChainId, address, tokenId]);
+
+  const toggleFavorite = async () => {
+    const key = `nftFavorite:${nftChainId}:${address}:${tokenId}`;
+    const next = !isFavorite;
+    setIsFavorite(next);
+    try {
+      if (next) {
+        await localforage.setItem(key, '1');
+      } else {
+        await localforage.removeItem(key);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const copyMetadataUrl = async () => {
+    if (!tokenURI) return;
+    try {
+      await navigator.clipboard.writeText(tokenURI);
+    } catch {
+      // ignore
+    }
+  };
+
+  const downloadImage = async () => {
+    const url = (imageOriginal ?? image ?? imageFromTokenURI) as string | undefined;
+    if (!url) return;
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${name ?? 'nft'}-${tokenId}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch {
+      // ignore
+    }
+  };
+
   const setCorrectChain = async () => {
     // If we aren't presently on the chain of the nft, change to it
     if (nftChainId !== currentChain.chainId) {
@@ -409,6 +464,10 @@ export function NftDetailsComponent({
             // TODO: Fix in https://github.com/MetaMask/metamask-extension/issues/31879
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onRemove={onRemove}
+            onToggleFavorite={toggleFavorite}
+            isFavorite={isFavorite}
+            onCopyMetadataUrl={copyMetadataUrl}
+            onDownloadImage={downloadImage}
           />
         </Box>
         <Box
