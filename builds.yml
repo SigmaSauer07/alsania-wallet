@@ -97,6 +97,25 @@ buildTypes:
     manifestOverrides: ./app/build-types/flask/manifest/
     buildNameOverride: MetaMask Flask
 
+  alsania:
+    id: 21
+    features:
+      - build-main
+      - keyring-snaps
+      - multichain
+      - solana
+      - solana-swaps
+      - multi-srp
+    env:
+      - ALLOW_LOCAL_SNAPS: true
+      - REQUIRE_SNAPS_ALLOWLIST: false
+      - REJECT_INVALID_SNAPS_PLATFORM_VERSION: false
+      - IFRAME_EXECUTION_ENVIRONMENT_URL: https://execution.metamask.io/iframe/9.1.0/index.html
+      - ACCOUNT_SNAPS_DIRECTORY_URL: https://metamask.github.io/snaps-directory-staging/main/account-management
+      - EIP_4337_ENTRYPOINT: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789'
+    manifestOverrides: ./app/build-types/beta/manifest/
+    buildNameOverride: Alsania Wallet
+
 # Build types are composed of a set of features.
 # Each feature can have code fences that add new code
 # as well declaring, defining and overriding env variables

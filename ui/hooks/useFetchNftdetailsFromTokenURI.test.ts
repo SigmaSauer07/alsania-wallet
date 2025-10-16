@@ -3,6 +3,21 @@ import { renderHook } from '@testing-library/react-hooks';
 import { act } from 'react-dom/test-utils';
 import useFetchNftDetailsFromTokenURI from './useFetchNftDetailsFromTokenURI';
 
+// Provide a default IPFS gateway via selector
+jest.mock('react-redux', () => ({
+  useSelector: (selector: (state: any) => any) =>
+    selector({ metamask: { ipfsGateway: 'dweb.link' } }),
+}));
+
+// Simplify IPFS URL resolution during tests
+jest.mock('@metamask/assets-controllers', () => ({
+  getFormattedIpfsUrl: async (
+    gateway: string,
+    ipfsUrl: string,
+    _preferCidV1?: boolean,
+  ) => `https://${gateway}/ipfs/${ipfsUrl.replace('ipfs://', '')}`,
+}));
+
 describe('useFetchNftDetailsFromTokenURI', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -65,12 +80,14 @@ describe('useFetchNftDetailsFromTokenURI', () => {
       );
     });
 
-    // TODO: Fix in https://github.com/MetaMask/metamask-extension/issues/31973
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((result as unknown as Record<string, any>).result.current).toEqual({
-      image:
-        'https://ipfs.io/ipfs/bafkreifvhjdf6ve4jfv6qytqtux5nd4nwnelioeiqx5x2ez5yrgrzk7ypi',
-      name: 'Rocks',
+    await waitFor(() => {
+      // TODO: Fix in https://github.com/MetaMask/metamask-extension/issues/31973
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((result as unknown as Record<string, any>).result.current).toEqual({
+        image:
+          'https://ipfs.io/ipfs/bafkreifvhjdf6ve4jfv6qytqtux5nd4nwnelioeiqx5x2ez5yrgrzk7ypi',
+        name: 'Rocks',
+      });
     });
   });
 
