@@ -3,6 +3,8 @@
  * Modern, accessible, customizable theme
  */
 
+import React from 'react';
+
 export interface AlsaniaTheme {
   colors: {
     primary: Record<string, string>;

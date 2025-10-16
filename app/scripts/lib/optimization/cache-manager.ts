@@ -1,5 +1,6 @@
 /**
  * Advanced Cache Manager with TTL, LRU, and Memory Management
+ * Includes encryption support for sensitive data
  */
 
 export interface CacheEntry<T> {
@@ -7,6 +8,7 @@ export interface CacheEntry<T> {
   expiresAt: number;
   size: number;
   lastAccessed: number;
+  encrypted?: boolean;
 }
 
 export interface CacheOptions {

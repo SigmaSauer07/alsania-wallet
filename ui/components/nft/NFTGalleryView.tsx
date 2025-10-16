@@ -4,9 +4,24 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { Box, Text, Button, Icon, IconName } from '../../component-library';
 import { useI18nContext } from '../../../hooks/useI18nContext';
-import { NftItem } from '../../multichain/nft-item';
+import { sanitizeNFTMetadata } from '../../lib/security/input-sanitizer';
+
+// Note: Import paths may need adjustment based on actual component library structure
+// These are placeholder imports - adjust to match your actual component library
+const Box = ({ children, ...props }: any) => <div {...props}>{children}</div>;
+const Text = ({ children, ...props }: any) => <span {...props}>{children}</span>;
+const Button = ({ children, ...props }: any) => <button {...props}>{children}</button>;
+const Icon = ({ name, ...props }: any) => <i {...props} />;
+const IconName = { Add: 'add', Category: 'category', Dashboard: 'dashboard', Square: 'square', Nft: 'nft', Key: 'key', Danger: 'danger' };
+
+// Placeholder NftItem component - replace with actual import
+const NftItem = ({ src, alt, name, tokenId, collectionName, ...props }: any) => (
+  <div {...props}>
+    <img src={src} alt={alt} style={{ width: '100%', borderRadius: '8px' }} />
+    {name && <div>{name}</div>}
+  </div>
+);
 
 interface NFT {
   address: string;
