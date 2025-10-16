@@ -1,0 +1,61 @@
+{
+  "manifest_version": 2,
+  "name": "Alsania Wallet",
+  "version": "1.0.0",
+  "description": "Secure, privacy-focused smart wallet with advanced NFT features for Ethereum and Alsania Chain",
+  "author": "Alsania Labs",
+  "homepage_url": "https://alsania.ai",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "32": "images/icon-32.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+    },
+    "default_title": "Alsania Wallet"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "js": ["contentscript.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "unlimitedStorage",
+    "alarms",
+    "notifications",
+    "http://localhost:8545/",
+    "https://*.infura.io/",
+    "https://*.alchemy.com/",
+    "https://*.quicknode.pro/",
+    "https://*.ipfs.io/",
+    "https://*.cloudflare-ipfs.com/",
+    "https://*.pinata.cloud/",
+    "https://*.opensea.io/",
+    "https://api.opensea.io/",
+    "https://alsania.ai/*"
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "web_accessible_resources": ["inpage.js", "phishing.html"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wallet@alsania.ai",
+      "strict_min_version": "109.0"
+    }
+  }
+}

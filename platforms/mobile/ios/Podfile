@@ -1,0 +1,61 @@
+# Alsania Wallet iOS Configuration
+require_relative '../../../node_modules/react-native/scripts/react_native_pods'
+require_relative '../../../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '13.4'
+install! 'cocoapods', :deterministic_uuids => false
+
+target 'AlsaniaWallet' do
+  config = use_native_modules!
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+
+  use_react_native!(
+    :path => '../../../node_modules/react-native',
+    :hermes_enabled => true,
+    :fabric_enabled => false,
+    :flipper_configuration => FlipperConfiguration.disabled,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  # Core dependencies
+  pod 'React', :path => '../../../node_modules/react-native/'
+  pod 'React-Core', :path => '../../../node_modules/react-native/'
+  pod 'React-RCTActionSheet', :path => '../../../node_modules/react-native/Libraries/ActionSheetIOS'
+  pod 'React-RCTAnimation', :path => '../../../node_modules/react-native/Libraries/NativeAnimation'
+  pod 'React-RCTBlob', :path => '../../../node_modules/react-native/Libraries/Blob'
+  pod 'React-RCTImage', :path => '../../../node_modules/react-native/Libraries/Image'
+  pod 'React-RCTLinking', :path => '../../../node_modules/react-native/Libraries/LinkingIOS'
+  pod 'React-RCTNetwork', :path => '../../../node_modules/react-native/Libraries/Network'
+  pod 'React-RCTSettings', :path => '../../../node_modules/react-native/Libraries/Settings'
+  pod 'React-RCTText', :path => '../../../node_modules/react-native/Libraries/Text'
+  pod 'React-RCTVibration', :path => '../../../node_modules/react-native/Libraries/Vibration'
+
+  # Biometric authentication
+  pod 'LocalAuthentication'
+  
+  # Camera for QR scanning
+  pod 'react-native-camera', :path => '../../../node_modules/react-native-camera'
+  
+  # Secure storage
+  pod 'KeychainAccess', '~> 4.2'
+  
+  # WalletConnect
+  pod 'WalletConnectSwift', '~> 1.7'
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      '../../../node_modules/react-native',
+      :mac_catalyst_enabled => false
+    )
+    
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.4'
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+      end
+    end
+  end
+end
