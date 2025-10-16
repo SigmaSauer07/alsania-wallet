@@ -1,0 +1,322 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, cursor/*]
+  pull_request:
+    branches: [main, develop]
+  release:
+    types: [created]
+
+jobs:
+  verify:
+    name: Verify Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Run linters
+        run: make lint
+      
+      - name: Type check
+        run: make typecheck
+      
+      - name: Run tests
+        run: make test-unit
+      
+      - name: Generate coverage
+        run: make test-coverage
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+
+  build-extensions:
+    name: Build Browser Extensions
+    needs: verify
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Build Chrome extension
+        run: make build-chrome
+      
+      - name: Build Firefox extension
+        run: make build-firefox
+      
+      - name: Package Chrome extension
+        run: make package-chrome
+      
+      - name: Package Firefox extension
+        run: make package-firefox
+      
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chrome-extension
+          path: platforms/dist/chrome-extension.zip
+      
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: firefox-extension
+          path: platforms/dist/firefox-extension.zip
+
+  build-web:
+    name: Build Web Application
+    needs: verify
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Build web app
+        run: make build-web
+      
+      - name: Package web app
+        run: make package-web
+      
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-app
+          path: platforms/dist/web-app.tar.gz
+
+  build-desktop:
+    name: Build Desktop - ${{ matrix.os }}
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack (Unix)
+        if: runner.os != 'Windows'
+        run: corepack enable
+      
+      - name: Enable Corepack (Windows)
+        if: runner.os == 'Windows'
+        run: corepack enable
+        shell: pwsh
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Build desktop - Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: make build-desktop-linux
+      
+      - name: Build desktop - macOS
+        if: matrix.os == 'macos-latest'
+        run: make build-desktop-mac
+      
+      - name: Build desktop - Windows
+        if: matrix.os == 'windows-latest'
+        run: make build-desktop-windows
+      
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: desktop-${{ matrix.os }}
+          path: platforms/dist/desktop/**/*
+
+  build-mobile:
+    name: Build Mobile - ${{ matrix.platform }}
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        include:
+          - platform: android
+            os: ubuntu-latest
+          - platform: ios
+            os: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Setup Java (Android)
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Build Android
+        if: matrix.platform == 'android'
+        run: make build-android
+      
+      - name: Setup Xcode (iOS)
+        if: matrix.platform == 'ios'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      
+      - name: Build iOS
+        if: matrix.platform == 'ios'
+        run: make build-ios
+      
+      - name: Upload mobile artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mobile-${{ matrix.platform }}
+          path: platforms/dist/mobile/${{ matrix.platform }}/**/*
+
+  test-e2e:
+    name: E2E Tests - ${{ matrix.browser }}
+    needs: build-extensions
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        browser: [chrome, firefox]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: make ci-install
+      
+      - name: Download extension
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.browser }}-extension
+      
+      - name: Run E2E tests
+        run: make test-e2e-${{ matrix.browser }}
+
+  release:
+    name: Create Release
+    needs: [build-extensions, build-web, build-desktop, build-mobile, test-e2e]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Generate checksums
+        run: |
+          cd platforms/dist
+          find . -type f -exec sha256sum {} \; > SHA256SUMS.txt
+      
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            platforms/dist/chrome-extension.zip
+            platforms/dist/firefox-extension.zip
+            platforms/dist/web-app.tar.gz
+            platforms/dist/SHA256SUMS.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [build-extensions, build-web]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment commands here
+
+  deploy-production:
+    name: Deploy to Production
+    needs: release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment commands here
