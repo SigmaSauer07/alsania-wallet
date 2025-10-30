@@ -45,6 +45,9 @@ jobs:
         with:
           files: ./coverage/coverage-final.json
 
+      - name: Ensure clear-webpack-cache.js is executable
+        run: chmod +x ./development/clear-webpack-cache.js
+
   build-extensions:
     name: Build Browser Extensions
     needs: verify
