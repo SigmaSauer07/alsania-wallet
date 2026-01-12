@@ -146,3 +146,7 @@ alsania-wallet-cleanup.sh
 # MetaMask specific (if leftover)
 artifacts/
 lavamoat/
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

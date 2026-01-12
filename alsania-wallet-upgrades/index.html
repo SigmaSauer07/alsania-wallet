@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alsania Wallet</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Core styles for dark theme and layout -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- AI chat component styles -->
+    <link rel="stylesheet" href="components/ai-chat.css" />
+</head>
+<body>
+    <!-- Header containing logo and wallet connect button -->
+    <header class="wallet-header">
+        <div class="logo">
+            <span class="logo-text">Alsania Wallet</span>
+        </div>
+        <button id="walletButton" class="wallet-button">Connect Wallet</button>
+    </header>
+
+    <!-- Container holds the sidebar and main content -->
+    <div class="wallet-container">
+        <!-- Sidebar with navigation links. New items have been added for History, Bridge and Contacts -->
+        <nav class="wallet-sidebar">
+            <ul>
+                <li><a href="#dashboard" class="active">Dashboard</a></li>
+                <li><a href="#send">Send</a></li>
+                <li><a href="#receive">Receive</a></li>
+                <li><a href="#domains">Domains</a></li>
+                <li><a href="#nfts">NFTs</a></li>
+                <li><a href="#history">History</a></li>
+                <li><a href="#bridge">Bridge</a></li>
+                <li><a href="#contacts">Contacts</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content area for each section. Sections are hidden by default except dashboard. -->
+        <main class="wallet-main">
+            <!-- Dashboard section shows balances and recent activity -->
+            <section id="dashboard" class="wallet-section">
+                <h2>Dashboard</h2>
+                <div class="balance-cards">
+                    <div class="balance-card">
+                        <h3>ETH Balance</h3>
+                        <span id="ethBalance">0.00 ETH</span>
+                    </div>
+                    <div class="balance-card">
+                        <h3>Alsania Token</h3>
+                        <span id="alsBalance">0.00 ALS</span>
+                    </div>
+                </div>
+                <div class="recent-transactions">
+                    <h3>Recent Transactions</h3>
+                    <ul id="txList">
+                        <li>No transactions yet.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Send assets -->
+            <section id="send" class="wallet-section" style="display: none;">
+                <h2>Send Assets</h2>
+                <form id="sendForm" class="wallet-form">
+                    <label for="sendAsset">Asset</label>
+                    <select id="sendAsset">
+                        <option value="eth">ETH</option>
+                        <option value="als">ALS</option>
+                    </select>
+                    <label for="sendTo">Recipient Address</label>
+                    <input type="text" id="sendTo" placeholder="0x…" required />
+                    <label for="sendAmount">Amount</label>
+                    <input type="number" id="sendAmount" min="0" step="0.0001" required />
+                    <button type="submit" class="cta-button">Send</button>
+                </form>
+            </section>
+
+            <!-- Receive assets -->
+            <section id="receive" class="wallet-section" style="display: none;">
+                <h2>Receive Assets</h2>
+                <p>Your wallet address:</p>
+                <div id="receiveAddress" class="receive-address">Connect your wallet to view your address</div>
+                <button id="copyAddress" class="secondary-button">Copy Address</button>
+            </section>
+
+            <!-- Domains section for managing enhanced domains -->
+            <section id="domains" class="wallet-section" style="display: none;">
+                <h2>Your Domains</h2>
+                <p>Manage your Alsania Enhanced Domains.</p>
+                <div id="domainList">Connect your wallet to load domains.</div>
+                <!-- Link to register new domains on the AED Home site -->
+                <a href="../aed-frontend/AEDHome/index.html" class="cta-button">Register New Domain</a>
+                <!-- Form to customise domain metadata (placeholder for future integration) -->
+                <div id="domainCustom" style="margin-top:1.5rem; display:none;">
+                    <h3>Edit Domain</h3>
+                    <form id="domainForm" class="wallet-form">
+                        <label for="domainName">Domain Name</label>
+                        <input type="text" id="domainName" disabled />
+                        <label for="profileURI">Profile URI</label>
+                        <input type="text" id="profileURI" placeholder="ipfs://..." />
+                        <label for="imageURI">Image URI</label>
+                        <input type="text" id="imageURI" placeholder="ipfs://..." />
+                        <button type="submit" class="cta-button">Save</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- NFTs section lists NFTs owned by the connected wallet -->
+            <section id="nfts" class="wallet-section" style="display: none;">
+                <h2>Your NFTs</h2>
+                <div id="walletNftGrid" class="nft-grid"></div>
+                <p id="noNfts">Connect your wallet to view your NFTs.</p>
+            </section>
+
+            <!-- History section shows transaction history -->
+            <section id="history" class="wallet-section" style="display: none;">
+                <h2>Transaction History</h2>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Asset</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                        <tr><td colspan="5">No history yet.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Bridge section allows assets to be moved cross‑chain (stub implementation) -->
+            <section id="bridge" class="wallet-section" style="display: none;">
+                <h2>Bridge Assets</h2>
+                <form id="bridgeForm" class="wallet-form">
+                    <label for="bridgeAsset">Asset</label>
+                    <select id="bridgeAsset">
+                        <option value="eth">ETH</option>
+                        <option value="als">ALS</option>
+                        <option value="domain">Domain</option>
+                    </select>
+                    <label for="bridgeChain">Destination Chain</label>
+                    <select id="bridgeChain">
+                        <option value="arbitrum">Arbitrum</option>
+                        <option value="optimism">Optimism</option>
+                        <option value="bsc">BSC</option>
+                    </select>
+                    <label for="bridgeAmount">Amount / Domain</label>
+                    <input type="text" id="bridgeAmount" placeholder="e.g. 1.5 or domain name" required />
+                    <button type="submit" class="cta-button">Bridge</button>
+                </form>
+                <p class="small-note">Bridging is experimental. Fees apply. Use at your own risk.</p>
+            </section>
+
+            <!-- Contacts section to manage saved addresses -->
+            <section id="contacts" class="wallet-section" style="display: none;">
+                <h2>Contacts</h2>
+                <form id="contactForm" class="wallet-form">
+                    <label for="contactName">Contact Name</label>
+                    <input type="text" id="contactName" required />
+                    <label for="contactAddress">Address</label>
+                    <input type="text" id="contactAddress" placeholder="0x…" required />
+                    <button type="submit" class="cta-button">Add Contact</button>
+                </form>
+                <ul id="contactList" class="contact-list">
+                    <li>No contacts saved.</li>
+                </ul>
+            </section>
+
+            <!-- Settings section for account actions -->
+            <section id="settings" class="wallet-section" style="display: none;">
+                <h2>Settings</h2>
+                <button id="disconnectButton" class="secondary-button">Disconnect Wallet</button>
+            </section>
+        </main>
+    </div>
+
+    <!-- Web3 library to connect to wallet providers -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- Wallet connect component -->
+    <script src="components/wallet.js"></script>
+    <!-- AI chat scripts -->
+    <script src="components/ai-chat.js"></script>
+    <!-- Custom page logic -->
+    <script src="js/script.js"></script>
+    <script>
+        // Initialize the AI chat for wallet support
+        initAIChat({
+            title: 'Alsania Wallet AI',
+            welcomeMessage: 'Need help with your wallet? Ask away!',
+            async onAsk(msg) {
+                // TODO: replace this stub with a call to your AI service
+                return 'This is a wallet assistant stub. Replace with real AI output.';
+            }
+        });
+    </script>
+</body>
+</html>

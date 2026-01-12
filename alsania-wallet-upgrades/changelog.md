@@ -1,0 +1,1 @@
+add any features/enhancements from the alsania-wallet-upgrades to the alsania-wallet and make sure that everything is implemented correctly. add any extra features you feel should be added to make this fully Alsania.
