@@ -47,10 +47,7 @@ jobs:
           files: ./coverage/coverage-final.json
 
       - name: Ensure webpack cache clearing script is executable
-        run: |
-          if [ -f development/clear-webpack-cache.js ]; then
-            chmod +x development/clear-webpack-cache.js
-          fi
+        run: test -f development/clear-webpack-cache.js && chmod +x development/clear-webpack-cache.js || echo "no clear-webpack-cache.js — skipping"
 
   build-extensions:
     name: Build Browser Extensions
