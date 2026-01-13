@@ -1,5 +1,5 @@
 name: CI/CD Pipeline
-
+  
 on:
   push:
     branches: [main, develop, cursor/*]
@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Ensure clear-webpack-cache.js is executable
+        run: chmod +x development/clear-webpack-cache.js
+  
       - name: Checkout code
         uses: actions/checkout@v4
       
