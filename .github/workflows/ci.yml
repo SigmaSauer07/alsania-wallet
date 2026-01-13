@@ -14,17 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Ensure clear-webpack-cache.js is executable
-        run: chmod +x development/clear-webpack-cache.js
-  
+        
       - name: Checkout code
         uses: actions/checkout@v4
-      
+    
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.17.0'
-      
+    
       - name: Enable Corepack
         run: corepack enable
       
@@ -48,8 +46,11 @@ jobs:
         with:
           files: ./coverage/coverage-final.json
 
-      - name: Ensure clear-webpack-cache.js is executable
-        run: chmod +x ./development/clear-webpack-cache.js
+      - name: Ensure webpack cache clearing script is executable
+        run: |
+          if [ -f development/clear-webpack-cache.js ]; then
+            chmod +x development/clear-webpack-cache.js
+          fi
 
   build-extensions:
     name: Build Browser Extensions
